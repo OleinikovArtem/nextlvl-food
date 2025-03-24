@@ -1,13 +1,5 @@
-const fs = require('fs');
-const path = require('path');
-
-const dbDir = path.join(__dirname, 'tmp');
-if (!fs.existsSync(dbDir)) {
-  fs.mkdirSync(dbDir, { recursive: true });
-}
-
 const sql = require('better-sqlite3');
-const db = sql(path.join(dbDir, 'meals.db'));
+const db = sql('/tmp/meals.db')
 
 const dummyMeals = [
   {
