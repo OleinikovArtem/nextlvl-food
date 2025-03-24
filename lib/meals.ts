@@ -42,7 +42,7 @@ export async function saveMeal(meal: NewMeal & { image: File }) {
   const instructions = xss(meal.instructions)
 
   const extension = meal.image.name.split('.').pop()
-  const fileName = `${meal.slug}-${Date.now()}.${extension}`
+  const fileName = `${slug}-${Date.now()}.${extension}`
 
   const bufferedImage = await meal.image.arrayBuffer()
   const bucketName = BASE_IMG_URl?.slice(8).split('.')[0]
