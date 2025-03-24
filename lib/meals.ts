@@ -11,7 +11,7 @@ import { BASE_IMG_URl } from '@/constants'
 const s3 = new S3({
   region: 'eu-north-1'
 });
-const db = sql('meals.db')
+const db = sql('/tmp/meals.db')
 
 export async function getMeals() {
   await simulateDelay(2000)
