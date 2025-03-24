@@ -1,3 +1,5 @@
+import { S3 } from '@aws-sdk/client-s3'
+
 import fs from 'node:fs'
 
 import sql from 'better-sqlite3'
@@ -6,7 +8,11 @@ import xss from 'xss'
 
 import { Meal, NewMeal } from '@/types'
 import { simulateDelay } from '@/utils/simulateDelay'
+import { BASE_IMG_URl } from '@/constants'
 
+const s3 = new S3({
+  region: 'eu-north-1'
+});
 const db = sql('meals.db')
 
 export async function getMeals() {
@@ -37,28 +43,43 @@ export async function saveMeal(meal: NewMeal & { image: File }) {
   const slug = slugify(meal.title, { lower: true })
   const instructions = xss(meal.instructions)
 
-  // image
   const extension = meal.image.name.split('.').pop()
-  const fileName = `${meal.title}-${Date.now()}.${extension}`
+  const fileName = `${meal.slug}-${Date.now()}.${extension}`
 
-  const stream = fs.createWriteStream(`public/images/${fileName}`)
   const bufferedImage = await meal.image.arrayBuffer()
+  const bucketName = BASE_IMG_URl?.slice(8).split('.')[0]
 
-  stream.write(Buffer.from(bufferedImage), (error) => {
-    if (error) {
-      throw new Error('Saving image failed')
-    }
+  await s3.putObject({
+    Bucket: bucketName,
+    Key: fileName,
+    Body: Buffer.from(bufferedImage),
+    ContentType: meal.image.type,
   })
 
-  const newMeal = {
-    ...meal,
-    slug,
-    instructions,
-    image: `/images/${fileName}`
-  }
 
-  await db.prepare(`
-    INSERT INTO meals (title, summary, instructions, creator, creator_email, image, slug)
-    VALUES (@title, @summary, @instructions, @creator, @creator_email, @image, @slug)
-  `).run(newMeal)
+  const image = fileName
+
+  db.prepare(
+    `
+    INSERT INTO meals
+      (title, summary, instructions, creator, creator_email, image, slug)
+    VALUES (
+      @title,
+      @summary,
+      @instructions,
+      @creator,
+      @creator_email,
+      @image,
+      @slug
+    )
+  `
+  ).run({
+    title: meal.title,
+    summary: meal.summary,
+    instructions,
+    creator: meal.creator,
+    creator_email: meal.creator_email,
+    image,
+    slug
+  })
 }

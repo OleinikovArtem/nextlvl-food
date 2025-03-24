@@ -9,4 +9,4 @@ export type Meal = {
   instructions: string;
 }
 
-export type NewMeal = Omit<Meal, 'image' | 'slug' | 'id'>
+export type NewMeal = Omit<Meal, 'image' | 'id'>
