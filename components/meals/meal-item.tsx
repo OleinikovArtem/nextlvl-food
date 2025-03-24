@@ -3,13 +3,15 @@ import Image from 'next/image'
 
 import classes from './meal-item.module.css'
 import { Meal } from '@/types'
+import { BASE_IMG_URl } from '@/constants'
 
 export default function MealItem({ title, slug, image, summary, creator }: Meal) {
+
   return (
     <article className={classes.meal}>
       <header>
         <div className={classes.image}>
-          <Image src={image} alt={title} fill/>
+          <Image src={`${BASE_IMG_URl}${image}`} alt={title} fill priority sizes='100%'/>
         </div>
         <div className={classes.headerText}>
           <h2>{title}</h2>
