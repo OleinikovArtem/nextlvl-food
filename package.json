@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "postinstall": "node init-db.js"
+
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.772.0",
