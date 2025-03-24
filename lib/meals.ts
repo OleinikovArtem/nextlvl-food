@@ -1,7 +1,5 @@
 import { S3 } from '@aws-sdk/client-s3'
 
-import fs from 'node:fs'
-
 import sql from 'better-sqlite3'
 import slugify from 'slugify'
 import xss from 'xss'
