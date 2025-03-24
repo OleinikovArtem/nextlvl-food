@@ -1,6 +1,8 @@
-
-export default function NotFound () {
+export default function NotFound() {
   return (
-    <h1 className='title'>Not Found 404</h1>
+    <main className="not-found">
+      <h1>Not Found 404</h1>
+      <p>Unfortunately, we could not find the requested page or resource.</p>
+    </main>
   )
 }

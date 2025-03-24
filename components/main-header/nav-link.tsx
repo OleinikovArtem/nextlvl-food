@@ -10,6 +10,6 @@ export const NavLink = ({ href, children }: { href: string; children: React.Reac
   const path = usePathname()
 
   return (
-    <Link href={href} className={path.startsWith('/meals') ? classes.active : ''}>{children}</Link>
+    <Link href={href} className={path.startsWith(href) ? classes.active : ''}>{children}</Link>
   )
 }

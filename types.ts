@@ -5,4 +5,8 @@ export type Meal = {
   summary: string;
   creator: string;
   image: string;
+  creator_email: string;
+  instructions: string;
 }
+
+export type NewMeal = Omit<Meal, 'image' | 'slug' | 'id'>
